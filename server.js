@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import projectRoutes from './routes/projectRoutes.js';
 import skillRoutes from './routes/skillRoutes.js';
 import contactRoute from './routes/contactRoute.js'
+import authRoute from './routes/authRoute.js'
+
 dotenv.config();
 
 const app = express();
@@ -18,7 +20,7 @@ app.use(express.json());
 app.use('/api/projects', projectRoutes);
 app.use('/api/skills', skillRoutes)
 app.use('/api/contact', contactRoute);
-
+app.use('/api/auth', authRoute)
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
