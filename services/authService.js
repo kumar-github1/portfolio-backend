@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
 
-export const register = async (username, email, password) => {
+export const register = async (username, email, password, role = 'user') => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         throw new Error("user already exists")
@@ -12,7 +12,8 @@ export const register = async (username, email, password) => {
     const user = new User({
         username,
         email,
-        password: hashed
+        password: hashed,
+        role
     })
 
     const newUser = await user.save();
@@ -28,6 +29,6 @@ export const login = async (email, password) => {
     if (!isMatch) {
         throw new Error("Invalid Credentials")
     }
-    const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" })
-    return { token, user: { id: existingUser._id, username: existingUser.username, email: existingUser.email } }
+    const token = jwt.sign({ id: existingUser._id, role: existingUser.role }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" })
+    return { token, user: { id: existingUser._id, username: existingUser.username, email: existingUser.email, role: existingUser.role } }
 }

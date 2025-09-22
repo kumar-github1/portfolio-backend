@@ -19,3 +19,14 @@ export const loginUser = async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 }
+
+// Temporary admin registration - remove in production
+export const registerAdmin = async (req, res) => {
+    try {
+        const user = await register(req.body.username, req.body.email, req.body.password, 'admin');
+        res.status(201).json({ message: "Admin user registered successfully" })
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+}
